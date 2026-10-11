@@ -1,0 +1,1003 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>French Coders | ID Card Generator</title>
+
+<style>
+:root {
+  --navy: #111a2c;
+  --blue: #5965f2;
+  --purple: #8585ff;
+  --bg: #f3f5fa;
+  --text: #172033;
+  --muted: #7d8798;
+  --border: #e2e7f0;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: "Segoe UI", Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+}
+
+button, input {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 6%;
+  background: white;
+  border-bottom: 1px solid var(--border);
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 20px;
+  font-weight: 800;
+}
+
+.brand span:last-child b {
+  color: var(--blue);
+}
+
+.brand-icon {
+  width: 38px;
+  height: 38px;
+  background: var(--blue);
+  color: white;
+  border-radius: 10px;
+  display: grid;
+  place-items: center;
+  font-size: 13px;
+}
+
+.nav-tag {
+  font-size: 10px;
+  letter-spacing: 1.5px;
+  font-weight: 700;
+  color: var(--muted);
+}
+
+.container {
+  max-width: 1120px;
+  margin: auto;
+  padding: 35px 20px 55px;
+}
+
+.intro {
+  margin-bottom: 30px;
+}
+
+.eyebrow {
+  color: var(--blue);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 2px;
+}
+
+.intro h1 {
+  font-size: clamp(30px, 4vw, 43px);
+  letter-spacing: -1.7px;
+  margin: 12px 0;
+}
+
+.intro h1 span {
+  color: var(--blue);
+}
+
+.intro p {
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.8;
+  max-width: 620px;
+}
+
+.workspace {
+  display: grid;
+  grid-template-columns: minmax(0, .85fr) minmax(0, 1.15fr);
+  gap: 25px;
+  align-items: start;
+}
+
+.panel {
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 25px;
+  box-shadow: 0 12px 35px #15203b08;
+}
+
+.panel h2 {
+  font-size: 19px;
+  margin: 0 0 8px;
+}
+
+.panel-description {
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.7;
+  margin-bottom: 25px;
+}
+
+.field {
+  margin-bottom: 17px;
+}
+
+.field label {
+  display: block;
+  font-size: 11px;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.field input {
+  width: 100%;
+  height: 44px;
+  border: 1px solid #dce2ec;
+  border-radius: 8px;
+  padding: 11px 12px;
+  background: white;
+  color: var(--text);
+  outline: none;
+  font-size: 12px;
+}
+
+.field input:focus {
+  border-color: var(--blue);
+  box-shadow: 0 0 0 3px #5965f218;
+}
+
+.photo-upload {
+  border: 1px dashed #b7bde9;
+  background: #f8f8ff;
+  border-radius: 10px;
+  padding: 20px;
+  text-align: center;
+}
+
+.photo-upload .upload-icon {
+  font-size: 25px;
+  color: var(--blue);
+}
+
+.photo-upload p {
+  color: var(--muted);
+  font-size: 11px;
+  line-height: 1.7;
+}
+
+.photo-upload input {
+  height: auto;
+  border: none;
+  padding: 5px;
+  font-size: 11px;
+}
+
+.primary-btn {
+  display: block;
+  width: 100%;
+  padding: 14px 18px;
+  background: var(--blue);
+  color: white;
+  border: none;
+  border-radius: 9px;
+  font-size: 12px;
+  font-weight: 700;
+  transition: .2s;
+}
+
+.primary-btn:hover {
+  background: #4652dc;
+  transform: translateY(-1px);
+}
+
+.secondary-btn {
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 11px 14px;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.preview-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 22px;
+}
+
+.preview-header h2 {
+  margin: 0;
+}
+
+.preview-status {
+  background: #eff0ff;
+  color: var(--blue);
+  padding: 7px 9px;
+  border-radius: 6px;
+  font-size: 9px;
+  font-weight: 800;
+}
+
+/* ID CARD */
+
+.card-stage {
+  background:
+    radial-gradient(circle at 10% 10%, #dce2ff 0, transparent 40%),
+    #f1f3f9;
+  border: 1px solid var(--border);
+  border-radius: 13px;
+  padding: 25px 15px;
+  display: flex;
+  justify-content: center;
+}
+
+.id-card {
+  position: relative;
+  width: 100%;
+  max-width: 355px;
+  background: white;
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid #e3e6ef;
+  box-shadow: 0 15px 35px #111a2c20;
+}
+
+.card-top {
+  background: var(--navy);
+  color: white;
+  padding: 19px 20px 27px;
+  position: relative;
+  overflow: hidden;
+}
+
+.card-top::after {
+  content: "";
+  position: absolute;
+  right: -40px;
+  top: -75px;
+  width: 180px;
+  height: 180px;
+  border: 25px solid #8585ff24;
+  border-radius: 50%;
+}
+
+.card-brand {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  position: relative;
+  z-index: 1;
+}
+
+.card-brand-icon {
+  width: 31px;
+  height: 31px;
+  display: grid;
+  place-items: center;
+  background: var(--blue);
+  border-radius: 8px;
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.card-brand-name {
+  font-size: 14px;
+  font-weight: 800;
+}
+
+.card-brand-name span {
+  color: #aeb5ff;
+}
+
+.card-company-label {
+  font-size: 8px;
+  color: #c0c7d8;
+  letter-spacing: 2px;
+  margin-top: 7px;
+}
+
+.card-accent {
+  height: 5px;
+  background: linear-gradient(90deg, var(--blue), #a2a3ff);
+}
+
+.card-body {
+  padding: 0 21px 20px;
+}
+
+.profile-row {
+  display: flex;
+  align-items: flex-end;
+  gap: 16px;
+  margin-top: -23px;
+  position: relative;
+  z-index: 2;
+}
+
+.employee-photo {
+  width: 94px;
+  height: 112px;
+  object-fit: cover;
+  object-position: center top;
+  background: #e9ecf7;
+  border: 4px solid white;
+  border-radius: 10px;
+  box-shadow: 0 4px 14px #111a2c14;
+}
+
+.photo-placeholder {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 31px;
+  font-weight: 800;
+  color: var(--blue);
+  background: #e9ecff;
+}
+
+.employee-heading {
+  padding-bottom: 9px;
+  min-width: 0;
+}
+
+.employee-heading .label {
+  font-size: 8px;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  color: var(--blue);
+}
+
+.employee-heading h3 {
+  font-size: 18px;
+  line-height: 1.25;
+  overflow-wrap: anywhere;
+  margin: 7px 0 5px;
+}
+
+.employee-heading p {
+  margin: 0;
+  font-size: 10px;
+  color: var(--muted);
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+
+.card-divider {
+  height: 1px;
+  background: var(--border);
+  margin: 20px 0;
+}
+
+.details-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 17px 12px;
+}
+
+.detail small {
+  display: block;
+  color: #8c96a7;
+  font-size: 8px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  margin-bottom: 6px;
+}
+
+.detail strong {
+  display: block;
+  font-size: 11px;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+
+.employee-number {
+  background: #f5f6ff;
+  border: 1px solid #e4e6ff;
+  border-radius: 9px;
+  padding: 12px;
+  margin-top: 19px;
+}
+
+.employee-number small {
+  display: block;
+  font-size: 8px;
+  color: #8189b2;
+  letter-spacing: 1.5px;
+  font-weight: 800;
+}
+
+.employee-number strong {
+  display: block;
+  color: #3f4cdb;
+  font-size: 17px;
+  letter-spacing: 2px;
+  margin-top: 6px;
+  overflow-wrap: anywhere;
+}
+
+.barcode-wrap {
+  margin-top: 18px;
+  text-align: center;
+}
+
+.barcode {
+  height: 43px;
+  width: 205px;
+  max-width: 100%;
+  margin: auto;
+  display: flex;
+  justify-content: center;
+  align-items: stretch;
+  gap: 2px;
+  overflow: hidden;
+}
+
+.bar {
+  display: block;
+  background: #141a29;
+  height: 100%;
+  flex: 0 0 auto;
+}
+
+.barcode-number {
+  font-size: 8px;
+  letter-spacing: 3px;
+  color: #657084;
+  margin-top: 7px;
+  overflow-wrap: anywhere;
+}
+
+.demo-mark {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 17px;
+  padding-top: 12px;
+  border-top: 1px solid var(--border);
+  color: #7d8798;
+  font-size: 7px;
+  font-weight: 800;
+  letter-spacing: .7px;
+}
+
+.demo-mark span:last-child {
+  color: var(--blue);
+}
+
+.preview-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-top: 18px;
+}
+
+.preview-actions button {
+  width: 100%;
+}
+
+.hint {
+  color: var(--muted);
+  font-size: 10px;
+  line-height: 1.7;
+  margin-top: 17px;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+.footer {
+  text-align: center;
+  padding: 25px;
+  color: #8c96a7;
+  font-size: 10px;
+}
+
+/* PRINT ONLY THE ID CARD */
+
+@media print {
+  @page {
+    size: 100mm 150mm;
+    margin: 5mm;
+  }
+
+  body {
+    background: white;
+  }
+
+  .navbar,
+  .intro,
+  .form-panel,
+  .preview-header,
+  .preview-actions,
+  .hint,
+  .footer {
+    display: none !important;
+  }
+
+  .container {
+    padding: 0;
+    margin: 0;
+    width: 100%;
+  }
+
+  .workspace {
+    display: block;
+  }
+
+  .preview-panel {
+    border: none;
+    box-shadow: none;
+    padding: 0;
+  }
+
+  .card-stage {
+    border: none;
+    padding: 0;
+    background: white;
+  }
+
+  .id-card {
+    max-width: 355px;
+    box-shadow: none;
+    border: 1px solid #ddd;
+    margin: 0 auto;
+    break-inside: avoid;
+  }
+}
+
+@media (max-width: 760px) {
+  .workspace {
+    grid-template-columns: 1fr;
+  }
+
+  .hero-card {
+    display: none;
+  }
+
+  .container {
+    padding: 25px 14px 35px;
+  }
+
+  .navbar {
+    padding: 15px;
+  }
+
+  .nav-tag {
+    font-size: 8px;
+    letter-spacing: .5px;
+  }
+
+  .panel {
+    padding: 20px 16px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<header class="navbar">
+  <div class="brand">
+    <span class="brand-icon">&lt;/&gt;</span>
+    <span>French <b>Coders</b></span>
+  </div>
+  <span class="nav-tag">EMPLOYEE ID STUDIO</span>
+</header>
+
+<main class="container">
+
+  <section class="intro">
+    <div class="eyebrow">PEOPLE &amp; CULTURE / ID STUDIO</div>
+    <h1>Your identity.<br><span>Our community.</span></h1>
+    <p>
+      Create a personalized French Coders employee ID card.
+      Enter the details, upload a photo, and generate your card instantly.
+    </p>
+  </section>
+
+  <section class="workspace">
+
+    <!-- INPUT FORM -->
+
+    <div class="panel form-panel">
+      <h2>Employee details</h2>
+      <p class="panel-description">
+        Fill in the information below to customize your ID card.
+      </p>
+
+      <form id="idForm">
+
+        <div class="field">
+          <label for="name">Employee full name *</label>
+          <input id="name" type="text" maxlength="70"
+                 placeholder="e.g. Alex Morgan" required>
+        </div>
+
+        <div class="field">
+          <label for="age">Age *</label>
+          <input id="age" type="number" min="16" max="100"
+                 placeholder="e.g. 24" required>
+        </div>
+
+        <div class="field">
+          <label for="dob">Date of birth *</label>
+          <input id="dob" type="date" required>
+        </div>
+
+        <div class="field">
+          <label for="role">Professional employee role *</label>
+          <input id="role" type="text" maxlength="60"
+                 placeholder="e.g. Software Developer" required>
+        </div>
+
+        <div class="field">
+          <label for="photo">Employee photograph *</label>
+          <div class="photo-upload">
+            <div class="upload-icon">▧</div>
+            <p>Choose a clear profile photograph<br>JPG, PNG or WebP · Maximum 5 MB</p>
+            <input id="photo" type="file"
+                   accept="image/jpeg,image/png,image/webp" required>
+          </div>
+        </div>
+
+        <button class="primary-btn" type="submit">
+          Generate employee ID card ↗
+        </button>
+
+      </form>
+    </div>
+
+    <!-- LIVE ID CARD PREVIEW -->
+
+    <div class="panel preview-panel">
+      <div class="preview-header">
+        <h2>Card preview</h2>
+        <span class="preview-status" id="status">PREVIEW</span>
+      </div>
+
+      <div class="card-stage">
+
+        <article class="id-card" id="idCard">
+
+          <div class="card-top">
+            <div class="card-brand">
+              <div class="card-brand-icon">&lt;/&gt;</div>
+              <div>
+                <div class="card-brand-name">French <span>Coders</span></div>
+                <div class="card-company-label">TECHNOLOGY &amp; INNOVATION</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card-accent"></div>
+
+          <div class="card-body">
+
+            <div class="profile-row">
+              <img id="employeePhoto" class="employee-photo"
+                   alt="Employee photograph" hidden>
+
+              <div id="photoPlaceholder"
+                   class="employee-photo photo-placeholder">FC</div>
+
+              <div class="employee-heading">
+                <div class="label">EMPLOYEE PROFILE</div>
+                <h3 id="outName">Employee Name</h3>
+                <p id="outRole">Professional Role</p>
+              </div>
+            </div>
+
+            <div class="card-divider"></div>
+
+            <div class="details-grid">
+              <div class="detail">
+                <small>AGE</small>
+                <strong id="outAge">—</strong>
+              </div>
+
+              <div class="detail">
+                <small>DATE OF BIRTH</small>
+                <strong id="outDob">—</strong>
+              </div>
+
+              <div class="detail">
+                <small>ORGANIZATION</small>
+                <strong>French Coders</strong>
+              </div>
+
+              <div class="detail">
+                <small>CARD TYPE</small>
+                <strong>Employee · Demo</strong>
+              </div>
+            </div>
+
+            <div class="employee-number">
+              <small>EMPLOYEE REFERENCE / DEMO</small>
+              <strong id="outId">FC-DEMO-000000</strong>
+            </div>
+
+            <div class="barcode-wrap">
+              <div class="barcode" id="barcode"
+                   aria-label="Decorative non-scannable barcode"></div>
+              <div class="barcode-number" id="barcodeNumber">
+                FC-DEMO-000000
+              </div>
+            </div>
+
+            <div class="demo-mark">
+              <span>FRENCH CODERS</span>
+              <span>DEMO · NOT VALID ID</span>
+            </div>
+
+          </div>
+        </article>
+
+      </div>
+
+      <div class="preview-actions">
+        <button class="primary-btn" id="downloadBtn" type="button">
+          Download card image
+        </button>
+        <button class="secondary-btn" id="printBtn" type="button">
+          Print / Save PDF
+        </button>
+      </div>
+
+      <p class="hint">
+        The employee reference and barcode are generated locally.
+        The barcode is decorative and does not encode or verify an employee record.
+        This is a demonstration card, not an official identity document.
+      </p>
+
+    </div>
+  </section>
+
+</main>
+
+<footer class="footer">
+  © <span id="year"></span> French Coders · Employee ID Studio
+</footer>
+
+<script>
+const form = document.getElementById("idForm");
+const photoInput = document.getElementById("photo");
+const photoElement = document.getElementById("employeePhoto");
+const photoPlaceholder = document.getElementById("photoPlaceholder");
+
+let photoURL = null;
+let generatedId = "FC-DEMO-000000";
+let hasGeneratedCard = false;
+
+document.getElementById("year").textContent =
+  new Date().getFullYear();
+
+/* Set the date picker maximum to today */
+
+document.getElementById("dob").max =
+  new Date().toISOString().slice(0, 10);
+
+/* Generate a random demo employee reference */
+
+function generateEmployeeId() {
+  const random = Math.floor(100000 + Math.random() * 900000);
+  return "FC-DEMO-" + random;
+}
+
+/* Draw a decorative, non-scannable barcode */
+
+function drawDecorativeBarcode(seedText) {
+  const barcode = document.getElementById("barcode");
+  barcode.replaceChildren();
+
+  let seed = 0;
+
+  for (let i = 0; i < seedText.length; i++) {
+    seed = (seed * 31 + seedText.charCodeAt(i)) >>> 0;
+  }
+
+  function nextRandom() {
+    seed = (seed * 1664525 + 1013904223) >>> 0;
+    return seed / 4294967296;
+  }
+
+  // Fixed guard-like bars, purely decorative.
+  const bars = [3, 2, 3];
+
+  for (let i = 0; i < 65; i++) {
+    bars.push(nextRandom() > 0.48 ? 1 + Math.floor(nextRandom() * 3) : 0);
+  }
+
+  bars.push(3, 2, 3);
+
+  bars.forEach(function(width) {
+    if (width === 0) {
+      const gap = document.createElement("span");
+      gap.style.width = "2px";
+      gap.style.flex = "0 0 2px";
+      barcode.appendChild(gap);
+      return;
+    }
+
+    const bar = document.createElement("span");
+    bar.className = "bar";
+    bar.style.width = width + "px";
+
+    // Decorative bar heights vary slightly.
+    bar.style.height = (75 + Math.floor(nextRandom() * 26)) + "%";
+    bar.style.alignSelf = "center";
+
+    barcode.appendChild(bar);
+  });
+}
+
+/* Handle local photo selection */
+
+photoInput.addEventListener("change", function() {
+  const file = photoInput.files[0];
+
+  if (!file) return;
+
+  if (!["image/jpeg", "image/png", "image/webp"].includes(file.type)) {
+    alert("Please choose a JPG, PNG, or WebP image.");
+    photoInput.value = "";
+    return;
+  }
+
+  if (file.size > 5 * 1024 * 1024) {
+    alert("Please choose a photo smaller than 5 MB.");
+    photoInput.value = "";
+    return;
+  }
+
+  const reader = new FileReader();
+
+  reader.onload = function(event) {
+    const image = new Image();
+
+    image.onload = function() {
+      if (photoURL) {
+        URL.revokeObjectURL(photoURL);
+      }
+
+      photoURL = URL.createObjectURL(file);
+      photoElement.src = photoURL;
+      photoElement.hidden = false;
+      photoPlaceholder.hidden = true;
+
+      if (hasGeneratedCard) {
+        updateDownloadAvailability();
+      }
+    };
+
+    image.onerror = function() {
+      alert("This image could not be opened. Please select another photo.");
+    };
+
+    image.src = event.target.result;
+  };
+
+  reader.readAsDataURL(file);
+});
+
+/* Validate form and generate card */
+
+form.addEventListener("submit", function(event) {
+  event.preventDefault();
+
+  if (!form.reportValidity()) return;
+
+  const name = document.getElementById("name").value.trim();
+  const age = Number(document.getElementById("age").value);
+  const dobValue = document.getElementById("dob").value;
+  const role = document.getElementById("role").value.trim();
+  const file = photoInput.files[0];
+
+  if (!name || !role || !dobValue || !file) {
+    alert("Please complete all fields and choose a photo.");
+    return;
+  }
+
+  if (age < 16 || age > 100) {
+    alert("Please enter an age between 16 and 100.");
+    return;
+  }
+
+  const dob = new Date(dobValue + "T00:00:00");
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+
+  if (Number.isNaN(dob.getTime()) || dob > today) {
+    alert("Please enter a valid date of birth.");
+    return;
+  }
+
+  // Calculate age from date of birth and verify it.
+  let calculatedAge = today.getFullYear() - dob.getFullYear();
+  const monthDifference = today.getMonth() - dob.getMonth();
+
+  if (
+    monthDifference < 0 ||
+    (monthDifference === 0 && today.getDate() < dob.getDate())
+  ) {
+    calculatedAge--;
+  }
+
+  if (calculatedAge !== age) {
+    alert("The age does not match the date of birth. Please check both fields.");
+    return;
+  }
+
+  if (!photoElement.src || photoElement.hidden) {
+    alert("Please upload a valid employee photo.");
+    return;
+  }
+
+  document.getElementById("outName").textContent = name;
+  document.getElementById("outRole").textContent = role;
+  document.getElementById("outAge").textContent = age + " years";
+
+  document.getElementById("outDob").textContent =
+    new Intl.DateTimeFormat("en-IN", {
+      day: "2-digit",
+      month: "short",
+      year: "numeric"
+    }).format(dob);
+
+  generatedId = generateEmployeeId();
+
+  document.getElementById("outId").textContent = generatedId;
+  document.getElementById("barcodeNumber").textContent = generatedId;
+
+  drawDecorativeBarcode(generatedId + name);
+
+  document.getElementById("status").textContent = "GENERATED";
+  hasGeneratedCard = true;
+
+  updateDownloadAvailability();
+
+  document.getElementById("idCard").scrollIntoView({
+    behavior: "smooth",
+    block: "center"
+  });
+});
+
+/* Download the card as a PNG image */
+
+function updateDownloadAvailability() {
+  document.getElementById("downloadBtn").disabled = !hasGeneratedCard;
+}
+
+document.getElementById("downloadBtn").addEventListener("click", async function() {
+  if (!hasGeneratedCard) {
+    alert("Please complete the form and generate your card first.");
+    return;
+  }
+
+  const card = document.getElementById("idCard");
+  const scale = 3;
+  const width = card.offsetWidth;
+  const height = card.offsetHeight;
+
+  const canvas = document.cre
