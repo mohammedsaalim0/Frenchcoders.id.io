@@ -1,158 +1,113 @@
 
-```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>French Coder • ID Card Studio</title>
+  <title>French Coder • Ultra-Fast ID Card Studio</title>
   
-  <!-- Google Fonts & Tailwind CDN -->
+  <!-- Preconnect & clean web fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Libre+Barcode+39+Text&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- FontAwesome Icons for UI -->
+  <!-- Lightweight FontAwesome Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <!-- html2canvas for card export -->
+  <!-- html2canvas for instant export -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
   <style>
+    /* High-Performance 60fps Design System */
     :root {
-      --fc-blue: #0026e6;
+      --fc-blue: #0044ff;
       --fc-cyan: #00d2ff;
-      --fc-purple: #7928ca;
-      --fc-red: #ff0055;
-      --bg-dark: #070913;
+      --fc-red: #ef4444;
+      --bg-dark: #090d16;
     }
 
     body {
-      font-family: 'Plus Jakarta Sans', sans-serif;
-      background: radial-gradient(circle at 15% 15%, #0f1535 0%, #060814 100%);
-      color: #e2e8f0;
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: var(--bg-dark);
+      background-image: 
+        radial-gradient(at 0% 0%, rgba(0, 68, 255, 0.12) 0px, transparent 50%),
+        radial-gradient(at 100% 100%, rgba(0, 210, 255, 0.08) 0px, transparent 50%);
+      color: #f1f5f9;
       min-height: 100vh;
       overflow-x: hidden;
+      margin: 0;
     }
 
     .font-mono-code {
       font-family: 'Fira Code', monospace;
     }
 
-    .barcode-font {
-      font-family: 'Libre Barcode 39 Text', cursive;
+    /* 3D Perspective Container with Hardware Acceleration */
+    .card-perspective-container {
+      perspective: 1000px;
+      transform: translateZ(0);
     }
 
-    /* Animated background glow spheres */
-    .glow-blob {
-      position: absolute;
-      border-radius: 50%;
-      filter: blur(80px);
-      z-index: 0;
-      pointer-events: none;
-      animation: floatOrb 14s infinite alternate ease-in-out;
-    }
-
-    @keyframes floatOrb {
-      0% { transform: translate(0, 0) scale(1); }
-      50% { transform: translate(40px, -30px) scale(1.1); }
-      100% { transform: translate(-30px, 40px) scale(0.95); }
-    }
-
-    /* Card 3D container */
-    .perspective-1000 {
-      perspective: 1400px;
-    }
-
-    .card-3d-wrapper {
-      transition: transform 0.15s ease-out, box-shadow 0.25s ease;
+    .card-3d-target {
       transform-style: preserve-3d;
       will-change: transform;
+      transition: box-shadow 0.2s ease;
+      transform: translateZ(0);
     }
 
-    /* Holographic sheen overlay */
-    .hologram-sheen {
+    /* Lightweight Holographic Sheen without continuous repaint */
+    .holo-film {
       position: absolute;
       inset: 0;
-      background: linear-gradient(
-        115deg,
-        transparent 20%,
-        rgba(0, 210, 255, 0.25) 36%,
-        rgba(255, 0, 85, 0.22) 50%,
-        rgba(255, 255, 255, 0.4) 62%,
-        transparent 80%
-      );
-      background-size: 250% 250%;
-      mix-blend-mode: color-dodge;
-      opacity: 0.4;
-      pointer-events: none;
-      transition: opacity 0.3s ease;
       border-radius: 1.25rem;
+      pointer-events: none;
+      background: linear-gradient(
+        125deg,
+        rgba(255, 255, 255, 0) 0%,
+        rgba(0, 210, 255, 0.08) 35%,
+        rgba(255, 255, 255, 0.18) 50%,
+        rgba(239, 68, 68, 0.08) 65%,
+        rgba(255, 255, 255, 0) 100%
+      );
+      mix-blend-mode: overlay;
+      opacity: 0.6;
+      transition: opacity 0.25s ease;
     }
 
-    .card-3d-wrapper:hover .hologram-sheen {
-      opacity: 0.8;
-      animation: holoShift 4s infinite linear;
-    }
-
-    @keyframes holoShift {
-      0% { background-position: 0% 0%; }
-      50% { background-position: 100% 100%; }
-      100% { background-position: 0% 0%; }
-    }
-
-    /* Badge Lanyard Slot */
-    .lanyard-slot {
-      width: 46px;
-      height: 10px;
-      background: #090c19;
-      border: 1px solid rgba(255, 255, 255, 0.15);
-      border-radius: 6px;
-      box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.8);
+    /* Badge Slot & Realistic Clip Elements */
+    .badge-slot {
+      width: 44px;
+      height: 8px;
+      background: #030712;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 9999px;
       margin: 0 auto;
     }
 
-    /* Realistic Badge Clip */
-    .lanyard-clip {
-      width: 60px;
-      height: 22px;
-      background: linear-gradient(180deg, #94a3b8 0%, #475569 50%, #334155 100%);
-      border-radius: 5px 5px 2px 2px;
-      margin: 0 auto -8px auto;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
-      position: relative;
-      z-index: 20;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+    .french-flag-badge {
+      display: inline-flex;
+      width: 18px;
+      height: 12px;
+      border-radius: 2px;
+      overflow: hidden;
+      box-shadow: 0 0 2px rgba(0,0,0,0.5);
     }
 
-    .lanyard-clip::after {
-      content: '';
-      width: 14px;
-      height: 14px;
-      border-radius: 50%;
-      background: #1e293b;
-      box-shadow: inset 0 1px 2px rgba(0,0,0,0.8);
-    }
-
-    /* French Flag Accent Ribbon */
-    .french-tricolor {
-      background: linear-gradient(90deg, #0026e6 0%, #0026e6 33.3%, #ffffff 33.3%, #ffffff 66.6%, #ed2939 66.6%, #ed2939 100%);
-    }
-
-    /* Custom input focus glows */
-    .input-glow:focus {
-      outline: none;
-      border-color: #00d2ff;
-      box-shadow: 0 0 18px rgba(0, 210, 255, 0.25);
-    }
-
-    /* Print styling strictly for the physical ID card */
+    /* Standard CR80 ID Card Print Rule (85.6mm x 53.98mm / 3.375 x 2.125 inches portrait) */
     @media print {
+      @page {
+        size: A4 portrait;
+        margin: 10mm;
+      }
+      body {
+        background: #ffffff !important;
+        color: #000000 !important;
+      }
       body * {
         visibility: hidden !important;
       }
-      #print-modal, #app-navbar, #form-container, #actions-panel, #interactive-tools {
+      #print-modal, #top-navbar, #form-panel, #controls-panel, #badge-meta-tip, .holo-film, .badge-slot-outer {
         display: none !important;
       }
       #id-card-capture-target, #id-card-capture-target * {
@@ -161,260 +116,287 @@
       #id-card-capture-target {
         position: fixed !important;
         left: 50% !important;
-        top: 50% !important;
-        transform: translate(-50%, -50%) scale(1) !important;
+        top: 20% !important;
+        transform: translate(-50%, 0) scale(1) !important;
+        width: 85.6mm !important;
+        height: auto !important;
+        min-height: 125mm !important;
         box-shadow: none !important;
-        border: 1px solid #1e293b !important;
-        margin: 0 !important;
+        border: 1px solid #cbd5e1 !important;
+        background: #090d1a !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
         page-break-inside: avoid;
-      }
-      .hologram-sheen {
-        display: none !important;
-      }
-      .lanyard-clip {
-        display: none !important;
       }
     }
   </style>
 </head>
 
-<body class="relative min-h-screen text-slate-100 selection:bg-cyan-500 selection:text-black">
+<body class="selection:bg-cyan-500 selection:text-slate-900">
 
-  <!-- Background decorative light blooms -->
-  <div class="glow-blob w-[400px] h-[400px] bg-blue-600/20 top-[-60px] left-[-60px]"></div>
-  <div class="glow-blob w-[450px] h-[450px] bg-cyan-500/15 bottom-10 right-[-80px]" style="animation-delay: -5s;"></div>
-  <div class="glow-blob w-[320px] h-[320px] bg-pink-600/15 top-[40%] left-[45%]" style="animation-delay: -9s;"></div>
-
-  <nav id="app-navbar" class="relative z-20 backdrop-blur-md bg-slate-950/60 border-b border-slate-800/80 sticky top-0 px-6 py-3.5">
+  <nav id="top-navbar" class="w-full bg-[#0d1322] border-b border-slate-800/80 sticky top-0 z-30 px-4 sm:px-8 py-3">
     <div class="max-w-7xl mx-auto flex items-center justify-between">
       <div class="flex items-center space-x-3">
-        <!-- Logo Emblem -->
-        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-blue-700 via-indigo-600 to-cyan-400 p-[1.5px] shadow-lg shadow-blue-500/20 flex items-center justify-center">
-          <div class="w-full h-full bg-slate-950 rounded-[10px] flex items-center justify-center">
-            <span class="font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-300 font-mono-code text-lg">&lt;FC/&gt;</span>
+        <div class="w-9 h-9 rounded-lg bg-gradient-to-tr from-blue-600 to-cyan-400 p-[1px] flex items-center justify-center">
+          <div class="w-full h-full bg-[#090d16] rounded-[7px] flex items-center justify-center font-mono-code font-bold text-cyan-400 text-sm">
+            FC
           </div>
         </div>
         <div>
           <div class="flex items-center gap-2">
-            <h1 class="text-xl font-black tracking-wider uppercase text-white">French Coder</h1>
-            <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-semibold bg-cyan-950 text-cyan-300 border border-cyan-800/60">
-              ID STUDIO v2.6
+            <h1 class="text-base sm:text-lg font-extrabold tracking-wider text-white">FRENCH CODER</h1>
+            <span class="text-[10px] font-mono-code uppercase px-2 py-0.5 rounded bg-blue-950 text-cyan-300 border border-blue-800 font-semibold">
+              ID STUDIO 60FPS
             </span>
           </div>
-          <p class="text-xs text-slate-400 tracking-tight">Identity & Badge Generation Gateway</p>
+          <p class="text-[11px] text-slate-400">Ultra-Lightweight Identity Card Generation Engine</p>
         </div>
       </div>
 
-      <div class="flex items-center gap-3">
-        <button id="quick-fill-btn" class="hidden sm:inline-flex items-center gap-2 px-3 py-1.5 text-xs font-semibold text-cyan-300 bg-cyan-950/50 hover:bg-cyan-900/60 border border-cyan-700/50 rounded-lg transition-all duration-200">
-          <i class="fa-solid fa-wand-magic-sparkles text-cyan-400"></i> Sample Profile
+      <div class="flex items-center gap-2">
+        <button id="btn-quick-fill" type="button" class="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-800/90 text-cyan-300 hover:bg-slate-700 border border-slate-700 transition">
+          <i class="fa-solid fa-wand-magic-sparkles text-cyan-400"></i> Sample
         </button>
-        <button onclick="window.print()" class="inline-flex items-center gap-2 px-3.5 py-1.5 text-xs font-semibold text-slate-200 bg-slate-800 hover:bg-slate-700 border border-slate-700 rounded-lg transition shadow-sm">
-          <i class="fa-solid fa-print"></i> Quick Print
+        <button onclick="window.print()" type="button" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-blue-600 text-white hover:bg-blue-500 transition shadow-sm">
+          <i class="fa-solid fa-print"></i> Print
         </button>
       </div>
     </div>
   </nav>
 
-  <main class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-10">
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
       
-      <!-- LEFT COLUMN: Creator Form -->
-      <div id="form-container" class="lg:col-span-5 bg-slate-900/70 backdrop-blur-xl border border-slate-800/90 rounded-2xl p-6 md:p-8 shadow-2xl relative">
-        <div class="flex items-center justify-between pb-5 border-b border-slate-800/80 mb-6">
-          <div>
-            <h2 class="text-lg font-bold text-white flex items-center gap-2">
-              <i class="fa-solid fa-address-card text-cyan-400"></i> Member Credentials
-            </h2>
-            <p class="text-xs text-slate-400 mt-0.5">Fill in candidate details to generate dynamic credentials</p>
+      <!-- LEFT: Form Input Console -->
+      <div id="form-panel" class="lg:col-span-5 bg-[#0e1424] border border-slate-800 rounded-2xl p-5 sm:p-7 shadow-xl">
+        <div class="flex items-center justify-between pb-4 border-b border-slate-800 mb-5">
+          <div class="flex items-center gap-2.5">
+            <i class="fa-solid fa-sliders text-cyan-400"></i>
+            <h2 class="text-sm font-bold tracking-wide uppercase text-white">Agent Credentials</h2>
           </div>
-          <span class="text-xs font-mono-code px-2.5 py-1 rounded-md bg-blue-950 text-blue-300 border border-blue-800">
-            SSL SECURE
-          </span>
+          <span class="text-[10px] font-mono-code text-slate-400 uppercase">Live Sync Active</span>
         </div>
 
-        <form id="id-generator-form" class="space-y-5" onsubmit="event.preventDefault();">
+        <form id="id-form" class="space-y-4" onsubmit="event.preventDefault();">
+          
           <!-- Full Name -->
           <div>
-            <label class="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-1.5" for="input-fullname">
-              Full Name <span class="text-rose-500">*</span>
+            <label for="input-fullname" class="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-1">
+              Full Name <span class="text-rose-400">*</span>
             </label>
             <div class="relative">
-              <span class="absolute inset-y-0 left-0 flex items-center pl-3.5 pointer-events-none text-slate-500 text-sm">
-                <i class="fa-regular fa-user"></i>
+              <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-500 text-xs">
+                <i class="fa-solid fa-user"></i>
               </span>
-              <input type="text" id="input-fullname" placeholder="e.g. Jean-Luc Dubois" required
-                class="w-full pl-10 pr-4 py-2.5 bg-slate-950/80 border border-slate-700/80 rounded-xl text-sm text-white placeholder-slate-500 input-glow transition">
+              <input type="text" id="input-fullname" value="Alexandre Dupont" required
+                class="w-full pl-9 pr-3 py-2 bg-[#080c17] border border-slate-700/80 rounded-xl text-sm text-white placeholder-slate-500 focus:outline-none focus:border-cyan-400 transition">
             </div>
           </div>
 
-          <!-- Professional Role -->
+          <!-- Profession / Title -->
           <div>
-            <label class="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-1.5" for="input-profession">
-              Profession / Specialization <span class="text-rose-500">*</span>
+            <label for="input-profession" class="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-1">
+              Profession / Specialization <span class="text-rose-400">*</span>
             </label>
             <div class="relative">
-              <span class="absolute inset-y-0 left-0 flex items-center pl-3.5 pointer-events-none text-slate-500 text-sm">
-                <i class="fa-solid fa-code"></i>
+              <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-500 text-xs">
+                <i class="fa-solid fa-laptop-code"></i>
               </span>
-              <select id="input-profession" class="w-full pl-10 pr-8 py-2.5 bg-slate-950/80 border border-slate-700/80 rounded-xl text-sm text-white input-glow transition appearance-none cursor-pointer">
-                <option value="Senior Full Stack Architect">Senior Full Stack Architect</option>
-                <option value="AI & Deep Learning Lead">AI & Deep Learning Lead</option>
-                <option value="DevOps & Cloud Maestro">DevOps & Cloud Maestro</option>
-                <option value="Cybersecurity Analyst">Cybersecurity Analyst</option>
-                <option value="Frontend UI/UX Artisan">Frontend UI/UX Artisan</option>
-                <option value="Blockchain Systems Engineer">Blockchain Systems Engineer</option>
+              <select id="input-profession" class="w-full pl-9 pr-8 py-2 bg-[#080c17] border border-slate-700/80 rounded-xl text-sm text-white focus:outline-none focus:border-cyan-400 transition appearance-none cursor-pointer">
+                <option value="Senior Full Stack Engineer">Senior Full Stack Engineer</option>
+                <option value="Lead AI & Algorithms Architect">Lead AI & Algorithms Architect</option>
+                <option value="DevOps & Cloud Systems Lead">DevOps & Cloud Systems Lead</option>
+                <option value="Cybersecurity & Cryptography Officer">Cybersecurity & Cryptography Officer</option>
+                <option value="Creative Frontend Technologist">Creative Frontend Technologist</option>
                 <option value="Chief Technology Officer">Chief Technology Officer</option>
               </select>
-              <span class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none text-slate-500 text-xs">
+              <span class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none text-slate-500 text-xs">
                 <i class="fa-solid fa-chevron-down"></i>
               </span>
             </div>
           </div>
 
-          <!-- Age and Date of Birth Row -->
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <!-- Age & Date of Birth -->
+          <div class="grid grid-cols-2 gap-3">
             <div>
-              <label class="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-1.5" for="input-age">
-                Age <span class="text-rose-500">*</span>
+              <label for="input-age" class="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-1">
+                Age <span class="text-rose-400">*</span>
               </label>
-              <div class="relative">
-                <span class="absolute inset-y-0 left-0 flex items-center pl-3.5 pointer-events-none text-slate-500 text-sm">
-                  <i class="fa-solid fa-arrow-up-9-1"></i>
-                </span>
-                <input type="number" id="input-age" min="16" max="99" placeholder="26" required
-                  class="w-full pl-10 pr-3 py-2.5 bg-slate-950/80 border border-slate-700/80 rounded-xl text-sm text-white placeholder-slate-500 input-glow transition">
-              </div>
+              <input type="number" id="input-age" min="16" max="99" value="27" required
+                class="w-full px-3 py-2 bg-[#080c17] border border-slate-700/80 rounded-xl text-sm text-white focus:outline-none focus:border-cyan-400 transition">
             </div>
-
             <div>
-              <label class="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-1.5" for="input-dob">
-                Date of Birth <span class="text-rose-500">*</span>
+              <label for="input-dob" class="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-1">
+                Date of Birth <span class="text-rose-400">*</span>
               </label>
-              <div class="relative">
-                <input type="date" id="input-dob" required
-                  class="w-full px-3 py-2.5 bg-slate-950/80 border border-slate-700/80 rounded-xl text-sm text-white placeholder-slate-500 input-glow transition">
-              </div>
+              <input type="date" id="input-dob" value="1999-04-18" required
+                class="w-full px-3 py-2 bg-[#080c17] border border-slate-700/80 rounded-xl text-sm text-white focus:outline-none focus:border-cyan-400 transition">
             </div>
           </div>
 
-          <!-- Photo Upload & Preset Section -->
+          <!-- Unique Serial Number (USN) & Regenerator -->
           <div>
-            <label class="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-1.5">
-              Profile Photo <span class="text-rose-500">*</span>
+            <div class="flex items-center justify-between mb-1">
+              <label for="input-usn" class="block text-xs font-semibold uppercase tracking-wider text-slate-300">
+                French Coder USN Code
+              </label>
+              <button type="button" id="btn-regen-usn" class="text-xs text-cyan-400 hover:text-cyan-300 font-mono-code font-semibold flex items-center gap-1">
+                <i class="fa-solid fa-rotate text-[10px]"></i> Auto-Generate
+              </button>
+            </div>
+            <div class="relative">
+              <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-cyan-400 text-xs font-mono-code">
+                #
+              </span>
+              <input type="text" id="input-usn" value="FC-2026-7842" required
+                class="w-full pl-8 pr-3 py-2 bg-[#080c17] border border-slate-700/80 rounded-xl text-sm font-mono-code text-cyan-300 focus:outline-none focus:border-cyan-400 transition">
+            </div>
+          </div>
+
+          <!-- Profile Image Selector -->
+          <div>
+            <label class="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-1">
+              Profile Portrait <span class="text-rose-400">*</span>
             </label>
-            <div class="flex flex-col sm:flex-row items-center gap-4 p-3 bg-slate-950/60 border border-slate-800 rounded-xl">
-              <!-- Thumbnail preview in form -->
-              <div class="relative w-16 h-16 rounded-xl overflow-hidden border-2 border-cyan-500/50 flex-shrink-0 bg-slate-900">
-                <img id="form-avatar-preview" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80" 
-                     alt="Avatar Preview" class="w-full h-full object-cover">
+            <div class="flex items-center gap-3 p-2.5 bg-[#080c17] border border-slate-800 rounded-xl">
+              <div class="w-12 h-14 rounded-lg overflow-hidden border border-cyan-500/40 flex-shrink-0 bg-slate-900">
+                <img id="form-img-preview" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80" alt="Preview" class="w-full h-full object-cover">
               </div>
-              
-              <div class="w-full flex-1">
-                <label for="input-photo" class="inline-flex items-center justify-center w-full px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold rounded-lg cursor-pointer transition border border-slate-700">
-                  <i class="fa-solid fa-cloud-arrow-up mr-2 text-cyan-400"></i> Upload Custom Photo
+              <div class="flex-1">
+                <label for="input-photo" class="inline-flex items-center justify-center w-full px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold rounded-lg cursor-pointer transition border border-slate-700">
+                  <i class="fa-solid fa-cloud-arrow-up mr-1.5 text-cyan-400"></i> Upload Portrait Photo
                 </label>
                 <input type="file" id="input-photo" accept="image/*" class="hidden">
-                <div class="flex items-center justify-between mt-2 text-[11px] text-slate-400">
-                  <span>Supported: JPG, PNG, WEBP</span>
-                  <button type="button" id="random-avatar-btn" class="text-cyan-400 hover:underline">Random Avatar</button>
+                <div class="flex items-center justify-between mt-1.5 text-[11px] text-slate-400">
+                  <span>JPG, PNG or WebP</span>
+                  <button type="button" id="btn-random-avatar" class="text-cyan-400 hover:underline">Sample Face</button>
                 </div>
               </div>
             </div>
           </div>
 
-          <!-- Action Buttons -->
-          <div class="pt-3 space-y-3">
-            <button type="button" id="generate-badge-btn" class="w-full py-3 px-6 rounded-xl font-bold text-sm tracking-wide text-white bg-gradient-to-r from-blue-600 via-indigo-600 to-cyan-500 hover:from-blue-500 hover:via-indigo-500 hover:to-cyan-400 shadow-lg shadow-cyan-500/25 transition-all duration-300 transform active:scale-[0.98] flex items-center justify-center gap-2">
-              <i class="fa-solid fa-microchip"></i>
-              <span>RE-GENERATE & ENCRYPT ID</span>
+          <!-- Reset / Master Action -->
+          <div class="pt-2 flex gap-2">
+            <button type="button" id="btn-reset" class="w-1/3 py-2.5 px-3 bg-slate-800/80 hover:bg-slate-700 text-xs font-semibold text-slate-300 rounded-xl transition border border-slate-700">
+              <i class="fa-solid fa-arrows-rotate mr-1"></i> Reset
             </button>
-            <div class="flex gap-2">
-              <button type="button" id="reset-form-btn" class="w-1/2 py-2 px-3 bg-slate-800/80 hover:bg-slate-700/80 text-xs font-medium text-slate-300 rounded-lg transition border border-slate-700/60">
-                <i class="fa-solid fa-arrows-rotate mr-1"></i> Reset
-              </button>
-              <button type="button" id="random-usn-btn" class="w-1/2 py-2 px-3 bg-slate-800/80 hover:bg-slate-700/80 text-xs font-medium text-cyan-300 rounded-lg transition border border-cyan-900/60">
-                <i class="fa-solid fa-fingerprint mr-1"></i> New USN Code
-              </button>
-            </div>
+            <button type="button" id="btn-tilt-toggle" class="w-2/3 py-2.5 px-3 bg-slate-800 hover:bg-slate-700 text-xs font-semibold text-cyan-300 rounded-xl transition border border-cyan-900/60 flex items-center justify-center gap-1.5">
+              <i class="fa-solid fa-cube text-cyan-400"></i> <span id="tilt-status-label">3D Tilt: Smooth 60fps</span>
+            </button>
           </div>
         </form>
       </div>
 
+      <!-- RIGHT: Interactive Live Badge Target -->
       <div class="lg:col-span-7 flex flex-col items-center justify-center">
-        <!-- Badge Controls header -->
-        <div id="interactive-tools" class="w-full max-w-sm flex items-center justify-between mb-4 px-2 text-xs text-slate-400">
-          <div class="flex items-center gap-2">
-            <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-ping"></span>
-            <span class="text-slate-300 font-medium">Interactive Badge Simulation</span>
+        
+        <!-- Lanyard Strap Connection Clip -->
+        <div class="badge-slot-outer w-full max-w-[350px] flex flex-col items-center">
+          <div class="w-16 h-4 bg-gradient-to-b from-slate-600 to-slate-800 rounded-t-md border-t border-slate-500 flex items-center justify-center shadow-md">
+            <div class="w-8 h-1 bg-slate-900 rounded-full"></div>
           </div>
-          <span class="text-slate-500 font-mono-code">Move cursor for 3D tilt</span>
         </div>
 
-        <!-- ID Card Lanyard top piece -->
-        <div class="w-full max-w-sm flex flex-col items-center">
-          <div class="lanyard-clip"></div>
-        </div>
-
-        <!-- The 3D Interactive Card Wrapper -->
-        <div class="perspective-1000 w-full flex justify-center">
-          <div id="card-3d-element" class="card-3d-wrapper w-[340px] sm:w-[370px]">
+        <!-- 3D Perspective Card Wrapper -->
+        <div class="card-perspective-container w-full flex justify-center">
+          <div id="card-3d" class="card-3d-target w-[335px] sm:w-[355px]">
             
-            <!-- CAPTURE & PRINT TARGET -->
-            <div id="id-card-capture-target" class="relative overflow-hidden bg-gradient-to-b from-slate-900 via-[#0d1326] to-[#070a16] border border-cyan-500/30 rounded-3xl shadow-2xl p-6 text-white select-none">
+            <!-- CAPTURE & PRINT CONTAINER -->
+            <div id="id-card-capture-target" class="relative overflow-hidden bg-[#0a0f1d] border border-cyan-500/40 rounded-2xl p-5 text-white shadow-2xl select-none">
               
-              <!-- Hologram sheen effect -->
-              <div class="hologram-sheen"></div>
+              <!-- Subtle Holographic Film (GPU friendly) -->
+              <div class="holo-film" id="card-holo-film"></div>
 
-              <!-- Lanyard punch slot -->
-              <div class="lanyard-slot mb-4"></div>
+              <!-- Lanyard Punch Hole -->
+              <div class="badge-slot mb-3"></div>
 
-              <!-- Card Top Header -->
-              <div class="flex items-center justify-between pb-3 border-b border-slate-800 relative z-10">
-                <div class="flex items-center gap-2.5">
-                  <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-600 via-indigo-600 to-cyan-400 p-[1px] flex items-center justify-center shadow-md shadow-blue-500/30">
-                    <div class="w-full h-full bg-slate-950 rounded-[7px] flex items-center justify-center font-mono-code font-bold text-xs text-cyan-300">
+              <!-- Header: French Coder Branding -->
+              <div class="flex items-center justify-between pb-2.5 border-b border-slate-800">
+                <div class="flex items-center gap-2">
+                  <div class="w-7 h-7 rounded-md bg-gradient-to-br from-blue-600 to-cyan-400 p-[1px] flex items-center justify-center">
+                    <div class="w-full h-full bg-[#0a0f1d] rounded-[5px] flex items-center justify-center font-mono-code font-bold text-[10px] text-cyan-400">
                       FC
                     </div>
                   </div>
                   <div>
-                    <h3 class="text-sm font-black tracking-widest text-white leading-none">FRENCH CODER</h3>
-                    <p class="text-[9px] font-mono-code text-cyan-400 tracking-wider mt-0.5">DEV CORPS • SEC-ID</p>
+                    <h3 class="text-xs font-black tracking-widest uppercase text-white leading-tight">FRENCH CODER</h3>
+                    <p class="text-[8px] font-mono-code text-cyan-400 tracking-wider">OFFICIAL CORPS BADGE</p>
                   </div>
                 </div>
 
-                <!-- Tricolor French Accent Ribbon & Badge Level -->
-                <div class="flex flex-col items-end gap-1">
-                  <div class="w-12 h-1.5 rounded-full french-tricolor shadow-sm"></div>
+                <div class="flex items-center gap-1.5">
+                  <!-- French Flag -->
+                  <div class="french-flag-badge">
+                    <span class="w-1/3 h-full bg-[#0026e6]"></span>
+                    <span class="w-1/3 h-full bg-[#ffffff]"></span>
+                    <span class="w-1/3 h-full bg-[#ef4135]"></span>
+                  </div>
                   <span class="text-[9px] font-mono-code font-bold px-1.5 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/30">
-                    LEVEL-4
+                    ACTIVE
                   </span>
                 </div>
               </div>
 
-              <!-- Middle Section: Photo & Identity Stats -->
-              <div class="mt-5 flex gap-4 items-center relative z-10">
-                <!-- Profile Avatar Holder with Glow Frame -->
-                <div class="relative group">
-                  <div class="w-24 h-28 rounded-2xl p-[2px] bg-gradient-to-b from-cyan-400 via-blue-600 to-purple-600 shadow-xl shadow-cyan-500/20">
-                    <img id="card-photo" 
-                         src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80" 
-                         alt="Member Avatar" 
-                         class="w-full h-full object-cover rounded-[14px] bg-slate-900"
-                         onerror="this.src='https://placehold.co/150x180/0f172a/38bdf8?text=FrenchCoder'">
+              <!-- Identity Body: Photo & Name -->
+              <div class="mt-4 flex gap-3.5 items-center">
+                <!-- Photo with Security Watermark -->
+                <div class="relative flex-shrink-0">
+                  <div class="w-20 h-24 rounded-xl p-[1.5px] bg-gradient-to-b from-cyan-400 to-blue-600">
+                    <img id="card-photo" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80" 
+                         alt="Member Avatar" class="w-full h-full object-cover rounded-[10px] bg-slate-900"
+                         onerror="this.src='https://placehold.co/120x150/090d16/00d2ff?text=FC'">
                   </div>
-                  <!-- Security Chip Hologram Watermark on Photo -->
-                  <div class="absolute bottom-1 right-1 w-6 h-6 rounded-md bg-amber-400/90 border border-amber-200/80 flex items-center justify-center shadow-sm">
-                    <i class="fa-solid fa-microchip text-[11px] text-amber-950"></i>
+                  <div class="absolute -bottom-1 -right-1 bg-amber-400 text-slate-950 text-[9px] font-bold px-1 rounded flex items-center shadow-sm">
+                    <i class="fa-solid fa-microchip text-[8px] mr-0.5"></i> SEC
                   </div>
                 </div>
 
-                <!-- Name & Professional Title -->
+                <!-- Info Block -->
                 <div class="flex-1 overflow-hidden">
-                  <p class="text-[10px] uppercase font-bold tracking-wider text-slate-400">Agent Name</p>
-                  <h4 id="card-name" class="text-lg font-extrabold text-white truncate tracking-tight">Jean-Luc Dubois</h4>
+                  <span class="text-[9px] font-mono-code uppercase tracking-wider text-slate-400">MEMBER NAME</span>
+                  <h4 id="card-name" class="text-base font-extrabold text-white truncate tracking-tight leading-tight mt-0.5">
+                    Alexandre Dupont
+                  </h4>
 
-                  <div class="mt-2">
-                    <p class="text-[10px] uppercase font-bold tracking-wider text-slate-400">Specialization</p>
-                    <div class="inline-block mt-0.5 max-w-full">
-                      <span id="card-profession" class="inline-block text-[11px] font-bold px-2 py-0.5 rounded-md bg-blue-950/80 text-cyan-300 
+                  <span class="text-[9px] font-mono-code uppercase tracking-wider text-slate-400 block mt-2">SPECIALIZATION</span>
+                  <div class="mt-0.5">
+                    <span id="card-profession" class="inline-block text-[10px] font-bold px-2 py-0.5 rounded bg-blue-950/80 text-cyan-300 border border-blue-700/60 truncate max-w-full">
+                      Senior Full Stack Engineer
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Card Metadata Grid -->
+              <div class="mt-3.5 grid grid-cols-3 gap-1.5 py-2 px-2.5 rounded-lg bg-[#070b14] border border-slate-800">
+                <div>
+                  <span class="block text-[8px] font-mono-code uppercase text-slate-400">AGE</span>
+                  <span id="card-age" class="text-xs font-bold text-white font-mono-code">27</span>
+                </div>
+                <div>
+                  <span class="block text-[8px] font-mono-code uppercase text-slate-400">DOB</span>
+                  <span id="card-dob" class="text-[11px] font-bold text-white font-mono-code">1999-04-18</span>
+                </div>
+                <div>
+                  <span class="block text-[8px] font-mono-code uppercase text-cyan-400">CLASS</span>
+                  <span class="text-xs font-bold text-cyan-300 font-mono-code">AUTH-L3</span>
+                </div>
+              </div>
+
+              <!-- USN and QR Code Section -->
+              <div class="mt-3 pt-2.5 border-t border-slate-800/80 flex items-center justify-between">
+                <div>
+                  <span class="text-[8px] uppercase tracking-wider font-mono-code text-slate-400 font-bold">FRENCH CODER USN</span>
+                  <div class="flex items-center gap-1 mt-0.5">
+                    <span id="card-usn" class="font-mono-code text-xs font-extrabold text-white tracking-wider">
+                      FC-2026-7842
+                    </span>
+                  </div>
+                  <div class="text-[8px] font-mono-code text-slate-400 mt-1">
+                    ISSUED: 2026-10-11 • EXP: 2029-10-11
+                  </div>
+                </div>
+
+                <!-- Clean Scalable Vector QR Code -->
+                <div class="w-10 h-10 bg-white p-0.5 rounded flex items-center justify-center flex-shrink-0">
+ 
